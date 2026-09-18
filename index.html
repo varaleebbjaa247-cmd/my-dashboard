@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Hub Dashboard</title>
+    <title>My Web Hub</title>
 
     <!-- โค้ดรองรับการเพิ่มลงหน้าจอ Home / PWA -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlBlcnNvbmFsIEh1YiIsCiAgInNob3J0X25hbWUiOiAiSHViIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjBmNGY4IiwKICAidGhlbWVfY29sb3IiOiAiIzFhNzNlOCIKfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk15IFdlYiBIdWIiLAogICJzaG9ydF9uYW1lIjogIkh1YiIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2YwZjRmOCIsCiAgInRoZW1lX2NvbG9yIjogIiMxYTczZTgiCn0=">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
@@ -16,6 +16,7 @@
             --accent-sky: #00c6ff;
             --accent-purple: #7f00ff;
             --text-main: #2c3e50;
+            --danger-red: #e71d36;
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
@@ -24,7 +25,7 @@
 
         header {
             text-align: center;
-            padding: 18px;
+            padding: 20px;
             background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
             color: white;
             border-radius: 16px;
@@ -32,7 +33,8 @@
             margin-bottom: 20px;
         }
 
-        header h1 { font-size: 20px; font-weight: 600; }
+        header h1 { font-size: 22px; font-weight: 700; }
+        header p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
 
         .card {
             background: white;
@@ -42,20 +44,27 @@
             margin-bottom: 20px;
         }
 
-        h2 { color: var(--primary-blue); font-size: 17px; margin-bottom: 12px; border-bottom: 2px solid #f0f4f8; padding-bottom: 8px; }
+        h2 { color: var(--primary-blue); font-size: 17px; margin-bottom: 14px; border-bottom: 2px solid #f0f4f8; padding-bottom: 8px; }
 
-        /* Quick Links Section */
+        /* Links List */
         .links-grid {
-            display: grid;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
+        .link-card-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .link-card {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px;
+            padding: 14px 16px;
             background: linear-gradient(135deg, #ffffff, #f8fafc);
             border: 1px solid #e1e8ed;
             border-radius: 12px;
@@ -71,162 +80,202 @@
         }
 
         .link-info { display: flex; align-items: center; gap: 12px; }
-        .link-icon { font-size: 24px; }
+        .link-icon { font-size: 22px; }
         .link-title { font-weight: bold; font-size: 15px; color: #1e293b; }
         .link-sub { font-size: 12px; color: #64748b; margin-top: 2px; }
         .arrow-icon { color: var(--primary-blue); font-weight: bold; }
 
-        /* Finance Form & Table */
-        input, select, button {
-            padding: 10px;
+        .btn-delete {
+            background: #ffeef0;
+            color: var(--danger-red);
+            border: 1px solid #fca5a5;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        /* Form Add Web */
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        input, select {
+            padding: 11px;
             border: 1px solid #e1e8ed;
             border-radius: 8px;
             font-size: 14px;
             outline: none;
+            width: 100%;
         }
 
-        .finance-summary { display: flex; gap: 10px; margin-bottom: 15px; }
-        .summary-box { flex: 1; padding: 10px; border-radius: 10px; background: #f8fafc; text-align: center; border: 1px solid #e2e8f0; font-size: 12px; }
-        .summary-box span { display: block; font-size: 15px; font-weight: bold; margin-top: 4px; }
+        input:focus {
+            border-color: var(--primary-blue);
+        }
 
-        .finance-form { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .finance-form input, .finance-form select { flex: 1; min-width: 110px; }
-
-        .btn-action {
+        .btn-add {
             background: linear-gradient(135deg, var(--accent-sky), var(--primary-blue));
             color: white;
             border: none;
+            padding: 12px;
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 14px;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eef2f5; }
-        th { background: #f8fafc; color: var(--primary-blue); }
+        .btn-add:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>⚡ Personal Space Hub</h1>
+        <h1>⚡ My Personal Web Hub</h1>
+        <p>ศูนย์รวมเว็บทางลัดส่วนตัว</p>
     </header>
 
-    <!-- ส่วนที่ 1: ทางลัดไปยังเว็บตารางเรียน และโน้ตส่วนตัว -->
+    <!-- รายการเว็บทั้งหมด -->
     <div class="card">
-        <h2>🔗 ทางลัดบริการส่วนตัว</h2>
-        <div class="links-grid">
-            
-            <!-- ลิงก์ที่ 1: ตารางเรียน -->
-            <a href="https://varaleebbjaa247-cmd.github.io/Day-per-day/" target="_blank" class="link-card">
-                <div class="link-info">
-                    <span class="link-icon">📅</span>
-                    <div>
-                        <div class="link-title">ตารางเรียนประจำวัน</div>
-                        <div class="link-sub">แก้ไขและเช็กตารางเรียน (Day-per-day)</div>
-                    </div>
-                </div>
-                <span class="arrow-icon">➔</span>
-            </a>
-
-            <!-- ลิงก์ที่ 2: โน้ตส่วนตัว -->
-            <a href="https://varaleebbjaa247-cmd.github.io/My-note-only-/" target="_blank" class="link-card">
-                <div class="link-info">
-                    <span class="link-icon">📝</span>
-                    <div>
-                        <div class="link-title">สมุดโน้ตส่วนตัว</div>
-                        <div class="link-sub">จดโน้ตรวดเร็ว ไร้โฆษณา (My-note-only)</div>
-                    </div>
-                </div>
-                <span class="arrow-icon">➔</span>
-            </a>
-
+        <h2>🔗 เว็บไซต์ของคุณ</h2>
+        <div id="linksGrid" class="links-grid">
+            <!-- เว็บจะถูกแสดงตรงนี้โดยอัตโนมัติ -->
         </div>
     </div>
 
-    <!-- ส่วนที่ 2: ตารางบันทึกรายรับ-รายจ่าย -->
+    <!-- ฟอร์มเพิ่มเว็บใหม่ -->
     <div class="card">
-        <h2>💰 บันทึกรายรับ - รายจ่าย</h2>
-        
-        <div class="finance-summary">
-            <div class="summary-box">รับรวม <span id="totalIncome" style="color:#2ec4b6;">0 ฿</span></div>
-            <div class="summary-box">จ่ายรวม <span id="totalExpense" style="color:#e71d36;">0 ฿</span></div>
-            <div class="summary-box">คงเหลือ <span id="balance" style="color:#1a73e8;">0 ฿</span></div>
+        <h2>➕ เพิ่มเว็บใหม่เข้า Hub</h2>
+        <div class="add-form">
+            <div class="form-row">
+                <select id="webIcon" style="width: 30%;">
+                    <option value="🌐">🌐 ทั่วไป</option>
+                    <option value="📅">📅 ตาราง</option>
+                    <option value="📝">📝 โน้ต</option>
+                    <option value="🎮">🎮 เกม</option>
+                    <option value="📚">📚 อ่านหนังสือ</option>
+                    <option value="⚙️">⚙️ เครื่องมือ</option>
+                </select>
+                <input type="text" id="webName" placeholder="ชื่อเว็บ (เช่น ตารางเรียน)">
+            </div>
+            <input type="url" id="webUrl" placeholder="ลิงก์ URL (เช่น https://...)">
+            <input type="text" id="webDesc" placeholder="คำอธิบายสั้นๆ (ไม่ใส่ก็ได้)">
+            <button class="btn-add" onclick="addWeb()">+ บันทึกเพิ่มเว็บ</button>
         </div>
-
-        <div class="finance-form">
-            <input type="text" id="financeDesc" placeholder="รายการ (เช่น ค่าอาหาร)">
-            <input type="number" id="financeAmount" placeholder="จำนวนเงิน">
-            <select id="financeType">
-                <option value="expense">รายจ่าย</option>
-                <option value="income">รายรับ</option>
-            </select>
-            <button class="btn-action" onclick="addTransaction()">+ บันทึก</button>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>รายการ</th>
-                    <th>ประเภท</th>
-                    <th>จำนวน</th>
-                    <th>จัดการ</th>
-                </tr>
-            </thead>
-            <tbody id="financeList"></tbody>
-        </table>
     </div>
 </div>
 
 <script>
-    let transactions = JSON.parse(localStorage.getItem('hub_transactions')) || [];
+    // เว็บเริ่มต้นของคุณ 2 เว็บ
+    const defaultWebs = [
+        {
+            id: 1,
+            icon: '📅',
+            name: 'ตารางเรียนประจำวัน',
+            url: 'https://varaleebbjaa247-cmd.github.io/Day-per-day/',
+            desc: 'แก้ไขและเช็กตารางเรียน (Day-per-day)'
+        },
+        {
+            id: 2,
+            icon: '📝',
+            name: 'สมุดโน้ตส่วนตัว',
+            url: 'https://varaleebbjaa247-cmd.github.io/My-note-only-/',
+            desc: 'จดโน้ตรวดเร็ว ไร้โฆษณา (My-note-only)'
+        }
+    ];
 
-    function addTransaction() {
-        const desc = document.getElementById('financeDesc').value;
-        const amount = parseFloat(document.getElementById('financeAmount').value);
-        const type = document.getElementById('financeType').value;
+    // โหลดข้อมูลจาก localStorage หรือใช้ค่าเริ่มต้น
+    let myWebs = JSON.parse(localStorage.getItem('my_hub_webs')) || defaultWebs;
 
-        if(!desc || isNaN(amount)) return alert('กรุณากรอกข้อมูลรายการและจำนวนเงินให้ครบถ้วน');
-
-        transactions.push({ id: Date.now(), desc, amount, type });
-        localStorage.setItem('hub_transactions', JSON.stringify(transactions));
-        
-        document.getElementById('financeDesc').value = '';
-        document.getElementById('financeAmount').value = '';
-        renderFinance();
+    function saveAndRender() {
+        localStorage.setItem('my_hub_webs', JSON.stringify(myWebs));
+        renderWebs();
     }
 
-    function deleteTransaction(id) {
-        transactions = transactions.filter(t => t.id !== id);
-        localStorage.setItem('hub_transactions', JSON.stringify(transactions));
-        renderFinance();
-    }
+    function renderWebs() {
+        const grid = document.getElementById('linksGrid');
+        grid.innerHTML = '';
 
-    function renderFinance() {
-        const list = document.getElementById('financeList');
-        list.innerHTML = '';
-        let income = 0, expense = 0;
+        if (myWebs.length === 0) {
+            grid.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:10px;">ยังไม่มีเว็บในระบบ กดเพิ่มที่ด้านล่างได้เลยครับ</p>';
+            return;
+        }
 
-        transactions.forEach(t => {
-            if(t.type === 'income') income += t.amount;
-            else expense += t.amount;
-
-            list.innerHTML += `
-                <tr>
-                    <td>${t.desc}</td>
-                    <td>${t.type === 'income' ? '🟢 รายรับ' : '🔴 รายจ่าย'}</td>
-                    <td>${t.amount.toLocaleString()} ฿</td>
-                    <td><button onclick="deleteTransaction(${t.id})" style="color:red; border:none; background:none; cursor:pointer;">❌</button></td>
-                </tr>
+        myWebs.forEach(web => {
+            grid.innerHTML += `
+                <div class="link-card-wrapper">
+                    <a href="${web.url}" target="_blank" class="link-card">
+                        <div class="link-info">
+                            <span class="link-icon">${web.icon}</span>
+                            <div>
+                                <div class="link-title">${web.name}</div>
+                                <div class="link-sub">${web.desc || web.url}</div>
+                            </div>
+                        </div>
+                        <span class="arrow-icon">➔</span>
+                    </a>
+                    <button class="btn-delete" onclick="deleteWeb(${web.id})" title="ลบเว็บนี้">❌</button>
+                </div>
             `;
         });
-
-        document.getElementById('totalIncome').innerText = `${income.toLocaleString()} ฿`;
-        document.getElementById('totalExpense').innerText = `${expense.toLocaleString()} ฿`;
-        document.getElementById('balance').innerText = `${(income - expense).toLocaleString()} ฿`;
     }
 
-    window.onload = renderFinance;
+    function addWeb() {
+        const icon = document.getElementById('webIcon').value;
+        const name = document.getElementById('webName').value.trim();
+        let url = document.getElementById('webUrl').value.trim();
+        const desc = document.getElementById('webDesc').value.trim();
+
+        if (!name || !url) {
+            alert('กรุณากรอกชื่อเว็บและลิงก์ URL ให้ครบถ้วนครับ');
+            return;
+        }
+
+        // หากลืมใส่ https:// ด้านหน้า ให้เติมให้อัตโนมัติ
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+
+        const newWeb = {
+            id: Date.now(),
+            icon: icon,
+            name: name,
+            url: url,
+            desc: desc
+        };
+
+        myWebs.push(newWeb);
+        saveAndRender();
+
+        // เคลียร์ฟอร์ม
+        document.getElementById('webName').value = '';
+        document.getElementById('webUrl').value = '';
+        document.getElementById('webDesc').value = '';
+    }
+
+    function deleteWeb(id) {
+        if (confirm('คุณต้องการลบเว็บนี้ออกจาก Hub ใช่ไหม?')) {
+            myWebs = myWebs.filter(w => w.id !== id);
+            saveAndRender();
+        }
+    }
+
+    // เรียกแสดงผลเมื่อโหลดหน้าเว็บ
+    window.onload = renderWebs;
 </script>
 
 </body>
