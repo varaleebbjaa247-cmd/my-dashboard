@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Dashboard</title>
+
+    <!-- โค้ดสำหรับทำเป็น PWA ให้ติดตั้งลงหน้าจอ Home ได้เหมือนแอป -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlBlcnNvbmFsIERhc2hib2FyZCIsCiAgInNob3J0X25hbWUiOiAiRGFzaGJvYXJkIiwKICAic3RhcnRfdXJsIjogIi4vIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjBmNGY4IiwKICAidGhlbWVfY29sb3IiOiAiIzFhNzNlOCIKfQ==">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --accent-sky: #00c6ff;
+            --accent-purple: #7f00ff;
+            --text-main: #2c3e50;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background: #f0f4f8; color: var(--text-main); padding: 15px; }
+        .container { max-width: 800px; margin: auto; }
+
+        header {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+            color: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(127, 0, 255, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            background: white;
+            padding: 6px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-sky));
+            color: white;
+        }
+
+        .tab-content { display: none; background: white; padding: 20px; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .tab-content.active { display: block; }
+
+        h2 { color: var(--primary-blue); margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #f0f4f8; padding-bottom: 8px; }
+
+        input, select, button, textarea {
+            padding: 10px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-sky), var(--primary-blue));
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .finance-summary { display: flex; gap: 10px; margin-bottom: 15px; }
+        .summary-box { flex: 1; padding: 10px; border-radius: 8px; background: #f8fafc; text-align: center; border: 1px solid #e2e8f0; font-size: 12px; }
+        .summary-box span { display: block; font-size: 16px; font-weight: bold; margin-top: 4px; }
+        .finance-form { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .finance-form input, .finance-form select { flex: 1; min-width: 100px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #eef2f5; }
+        th { background: #f8fafc; color: var(--primary-blue); }
+
+        .schedule-table input { width: 100%; border: none; background: transparent; text-align: center; }
+        .schedule-table input:focus { background: #f0f7ff; }
+
+        .note-area { width: 100%; height: 180px; resize: vertical; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h2>⚡ Personal Space Dashboard</h2>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('finance')">💰 รายรับ-จ่าย</button>
+        <button class="tab-btn" onclick="switchTab('schedule')">📅 ตารางเรียน</button>
+        <button class="tab-btn" onclick="switchTab('notes')">📝 โน้ต</button>
+    </div>
+
+    <!-- หัวข้อ 1: รายรับ-รายจ่าย -->
+    <div id="tab-finance" class="tab-content active">
+        <h2>💰 รายรับ-รายจ่ายประจำวัน</h2>
+        <div class="finance-summary">
+            <div class="summary-box">รับ <span id="totalIncome" style="color:#2ec4b6;">0 ฿</span></div>
+            <div class="summary-box">จ่าย <span id="totalExpense" style="color:#e71d36;">0 ฿</span></div>
+            <div class="summary-box">เหลือ <span id="balance" style="color:#1a73e8;">0 ฿</span></div>
+        </div>
+
+        <div class="finance-form">
+            <input type="text" id="financeDesc" placeholder="รายการ">
+            <input type="number" id="financeAmount" placeholder="จำนวนเงิน">
+            <select id="financeType">
+                <option value="expense">รายจ่าย</option>
+                <option value="income">รายรับ</option>
+            </select>
+            <button class="btn-action" onclick="addTransaction()">+ บันทึก</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>รายการ</th>
+                    <th>ประเภท</th>
+                    <th>จำนวน</th>
+                    <th>ลบ</th>
+                </tr>
+            </thead>
+            <tbody id="financeList"></tbody>
+        </table>
+    </div>
+
+    <!-- หัวข้อ 2: ตารางเรียน -->
+    <div id="tab-schedule" class="tab-content">
+        <h2>📅 ตารางเรียน (แก้ไขได้)</h2>
+        <div style="overflow-x:auto;">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>วัน/เวลา</th>
+                        <th>08:30-09:30</th>
+                        <th>09:30-10:30</th>
+                        <th>10:30-11:30</th>
+                        <th>12:30-13:30</th>
+                        <th>13:30-14:30</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody"></tbody>
+            </table>
+        </div>
+        <button class="btn-action" style="margin-top:12px; width:100%;" onclick="saveSchedule()">💾 บันทึกตารางเรียน</button>
+    </div>
+
+    <!-- หัวข้อ 3: บันทึกโน้ต -->
+    <div id="tab-notes" class="tab-content">
+        <h2>📝 สมุดโน้ตส่วนตัว</h2>
+        <textarea id="quickNote" class="note-area" placeholder="พิมพ์ข้อความบันทึกที่นี่..."></textarea>
+        <button class="btn-action" style="width:100%;" onclick="saveNote()">💾 บันทึกโน้ต</button>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    let transactions = JSON.parse(localStorage.getItem('my_transactions')) || [];
+    function addTransaction() {
+        const desc = document.getElementById('financeDesc').value;
+        const amount = parseFloat(document.getElementById('financeAmount').value);
+        const type = document.getElementById('financeType').value;
+        if(!desc || isNaN(amount)) return alert('กรุณากรอกข้อมูลให้ครบ');
+        transactions.push({ id: Date.now(), desc, amount, type });
+        localStorage.setItem('my_transactions', JSON.stringify(transactions));
+        document.getElementById('financeDesc').value = '';
+        document.getElementById('financeAmount').value = '';
+        renderFinance();
+    }
+    function deleteTransaction(id) {
+        transactions = transactions.filter(t => t.id !== id);
+        localStorage.setItem('my_transactions', JSON.stringify(transactions));
+        renderFinance();
+    }
+    function renderFinance() {
+        const list = document.getElementById('financeList');
+        list.innerHTML = '';
+        let income = 0, expense = 0;
+        transactions.forEach(t => {
+            if(t.type === 'income') income += t.amount; else expense += t.amount;
+            list.innerHTML += `
+                <tr>
+                    <td>${t.desc}</td>
+                    <td>${t.type === 'income' ? '🟢 รับ' : '🔴 จ่าย'}</td>
+                    <td>${t.amount.toLocaleString()} ฿</td>
+                    <td><button onclick="deleteTransaction(${t.id})" style="color:red; border:none; background:none; cursor:pointer;">❌</button></td>
+                </tr>`;
+        });
+        document.getElementById('totalIncome').innerText = `${income.toLocaleString()} ฿`;
+        document.getElementById('totalExpense').innerText = `${expense.toLocaleString()} ฿`;
+        document.getElementById('balance').innerText = `${(income - expense).toLocaleString()} ฿`;
+    }
+
+    const days = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์'];
+    let defaultSchedule = JSON.parse(localStorage.getItem('my_schedule')) || {};
+    function renderSchedule() {
+        const tbody = document.getElementById('scheduleBody');
+        tbody.innerHTML = '';
+        days.forEach(day => {
+            let row = `<tr><td><strong>${day}</strong></td>`;
+            for(let i=1; i<=5; i++) {
+                const key = `${day}_period_${i}`;
+                const val = defaultSchedule[key] || '';
+                row += `<td><input type="text" data-key="${key}" value="${val}" placeholder="-"></td>`;
+            }
+            row += `</tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+    function saveSchedule() {
+        document.querySelectorAll('.schedule-table input').forEach(input => {
+            defaultSchedule[input.dataset.key] = input.value;
+        });
+        localStorage.setItem('my_schedule', JSON.stringify(defaultSchedule));
+        alert('บันทึกตารางเรียนแล้ว!');
+    }
+
+    function saveNote() {
+        localStorage.setItem('my_quick_note', document.getElementById('quickNote').value);
+        alert('บันทึกโน้ตเรียบร้อย!');
+    }
+
+    window.onload = () => {
+        renderFinance();
+        renderSchedule();
+        document.getElementById('quickNote').value = localStorage.getItem('my_quick_note') || '';
+    };
+</script>
+
+</body>
+</html>
